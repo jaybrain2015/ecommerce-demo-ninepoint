@@ -6,6 +6,6 @@ use App\Http\Controllers\Api\ProductApiController;
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::apiResource('products', ProductApiController::class);
 });
