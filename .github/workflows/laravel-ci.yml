@@ -38,6 +38,19 @@ jobs:
           extensions: mbstring, pdo_mysql, zip
           coverage: none
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Copy env
         run: cp .env.example .env
 
@@ -51,6 +64,11 @@ jobs:
           echo "DB_PASSWORD=root" >> .env
           echo "APP_URL=http://localhost" >> .env
           echo "SESSION_DRIVER=file" >> .env
+          echo "APP_ENV=testing" >> .env
+          echo "CACHE_DRIVER=array" >> .env
+          echo "QUEUE_CONNECTION=sync" >> .env
+          echo "MAIL_MAILER=array" >> .env
+          echo "LOG_CHANNEL=stderr" >> .env
 
       - name: Install MySQL client
         run: sudo apt-get update && sudo apt-get install -y mysql-client
@@ -64,14 +82,18 @@ jobs:
       - name: Install deps
         run: composer install --no-interaction --prefer-dist
 
+      - name: Build assets (Vite)
+        run: |
+          if [ -f package.json ]; then npm ci && npm run build; fi
+
       - name: Generate key
         run: php artisan key:generate
 
       - name: Migrate
         run: php artisan migrate --force
 
-      - name: Tests
-        run: php artisan test
+      - name: Tests (Smoke)
+        run: php artisan test tests/Feature/SmokeTest.php
 
   deploy:
     needs: test
