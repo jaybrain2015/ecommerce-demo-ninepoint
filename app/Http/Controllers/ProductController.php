@@ -15,22 +15,88 @@ class ProductController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->service->latest();
-        return view('products.index', compact('products'));
+        $query = Product::query();
+
+        // Search functionality
+        if ($search = $request->get('search')) {
+            $query->search($search);
+        }
+
+        // Category filter
+        if ($category = $request->get('category')) {
+            $query->where('category', $category);
+        }
+
+        // Status filter
+        if ($request->has('active_only')) {
+            $query->active();
+        }
+
+        // Pagination
+        $products = $query->latest()->paginate(15);
+        $categories = Product::distinct()->pluck('category')->filter();
+
+        return view('products.index', compact('products', 'categories'));
+    }
+
+    public function create()
+    {
+        $categories = Product::distinct()->pluck('category')->filter();
+        return view('products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
-            'price' => 'required|numeric',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'category' => 'nullable|string|max:100',
+            'stock' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image'] = $path;
+        }
+
         $this->service->create($validated);
-        return back()->with('ok', 'Product created');
+        return redirect()->route('products.index')->with('ok', 'Product created successfully');
+    }
+
+    public function edit(Product $product)
+    {
+        $categories = Product::distinct()->pluck('category')->filter();
+        return view('products.edit', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string|max:100',
+            'stock' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image) {
+                \Storage::disk('public')->delete($product->image);
+            }
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image'] = $path;
+        }
+
+        $product->update($validated);
+        return redirect()->route('products.index')->with('ok', 'Product updated successfully');
     }
 
     public function importFake()
@@ -41,7 +107,21 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        // Delete image if exists
+        if ($product->image) {
+            \Storage::disk('public')->delete($product->image);
+        }
         $this->service->delete($product);
         return back()->with('ok', 'Product deleted');
+    }
+
+    public function updateStock(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $product->update($validated);
+        return back()->with('ok', 'Stock updated successfully');
     }
 }
