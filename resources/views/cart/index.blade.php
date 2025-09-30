@@ -65,7 +65,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                       </button>
                     </div>
-                    <button type="submit" class="px-3 py-1.5 text-sm font-medium text-brand-red border border-brand-red rounded-lg hover:bg-brand-red hover:text-white transition-all">
+                    <button type="submit" class="px-3 py-1.5 text-sm font-medium text-brand-red border border-brand-red rounded-lg hover:bg-brand-red hover:text-black transition-all">
                       Update
                     </button>
                   </form>

@@ -14,8 +14,14 @@ export default {
             colors: {
                 brand: {
                     gray: '#7A7D7F', 
-                    red: '#E5332A',  
-                    dark: '#1F2937', 
+                    red: '#E5332A',
+                    'red-dark': '#C72A22',
+                    dark: '#1F2937',
+                    blue: '#3B82F6',
+                    purple: '#8B5CF6',
+                    green: '#10B981',
+                    orange: '#F59E0B',
+                    pink: '#EC4899',
                 },
             },
             fontFamily: {

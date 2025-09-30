@@ -15,7 +15,7 @@
   </div>
 
   <!-- Form Card -->
-  <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+  <div class="rounded-xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 shadow-lg">
     <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data" class="p-6 space-y-6">
       @csrf
 

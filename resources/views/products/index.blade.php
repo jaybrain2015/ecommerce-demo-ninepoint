@@ -9,7 +9,7 @@
       <p class="mt-1 text-sm text-brand-gray">Manage your product catalog</p>
     </div>
     <div class="flex items-center gap-3">
-      <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-red text-black px-4 py-2 text-sm font-medium hover:brightness-95">
+      <a href="{{ route('products.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-red text-black px-4 py-2 text-sm font-medium hover:brightness-95 transition-all">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Add Product
       </a>
@@ -17,7 +17,7 @@
   </div>
 
   <!-- Search & Filters -->
-  <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-4">
+  <div class="rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm p-4">
     <form method="GET" class="flex items-center gap-3">
       <div class="relative">
         <input type="search" name="search" value="{{ request('search') }}" placeholder="Search products..." class="w-64 rounded-md border-gray-300 pl-10 text-sm focus:border-brand-red focus:ring-brand-red">
@@ -38,10 +38,10 @@
   </div>
 
   <!-- Products Table -->
-  <div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+  <div class="rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
           <tr>
             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Product</th>
             <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Price</th>
@@ -93,7 +93,7 @@
             <form method="POST" action="{{ route('products.updateStock', $p) }}" class="flex items-center justify-center gap-2">
               @csrf
               <input type="number" name="stock" value="{{ $p->stock }}" min="0" class="w-20 rounded-lg border-gray-300 text-center text-sm focus:border-brand-red focus:ring-brand-red">
-              <button type="submit" class="inline-flex items-center gap-1 rounded-lg border border-brand-red text-brand-red px-2 py-1 text-xs font-medium hover:bg-brand-red hover:text-white transition-all">
+              <button type="submit" class="inline-flex items-center gap-1 rounded-lg border border-brand-red text-brand-red px-2 py-1 text-xs font-medium hover:bg-brand-red hover:text-black transition-all">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
               </button>
             </form>
@@ -112,7 +112,7 @@
               </a>
               <form id="add-{{ $p->id }}" method="POST" action="{{ route('cart.add', $p) }}">
                 @csrf
-                <button type="submit" {{ $p->stock == 0 ? 'disabled' : '' }} class="inline-flex items-center gap-1.5 rounded-lg border border-brand-red text-brand-red px-3 py-2 text-sm font-medium hover:bg-brand-red hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                <button type="submit" {{ $p->stock == 0 ? 'disabled' : '' }} class="inline-flex items-center gap-1.5 rounded-lg border border-brand-red text-brand-red px-3 py-2 text-sm font-medium hover:bg-brand-red hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                   {{ $p->stock == 0 ? 'Out of Stock' : 'Add' }}
                 </button>

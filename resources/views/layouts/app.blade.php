@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'EcomDemo') }}</title>
+    <title>{{ config('app.name', 'ninepoint_ecommerce_demo') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css','resources/js/app.js'])
@@ -66,7 +66,7 @@
       </div>
     </header>
 
-    <!-- Flash messages -->
+    <!-- tis is for Flash messages -->
     @if (session('ok'))
       <div class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8">
         <div class="rounded-md border border-brand-red/30 bg-brand-red/10 text-brand-red px-4 py-3 text-sm">{{ session('ok') }}</div>
@@ -83,8 +83,8 @@
     <footer class="mt-6 border-t border-gray-200 dark:border-neutral-800 py-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-gray-500 dark:text-neutral-400">
         <div class="flex flex-col md:flex-row items-center justify-between gap-3">
-          <p>&copy; {{ date('Y') }} {{ config('app.name', 'EcomDemo') }}. Alle Rechte vorbehalten.</p>
-          <p class="opacity-80">Built with Laravel + Tailwind CSS</p>
+          <p>&copy; {{ date('Y') }} ninepoint_ecommerce_demo</p>
+          <p class="opacity-80">Built by john jonah</p>
         </div>
       </div>
     </footer>

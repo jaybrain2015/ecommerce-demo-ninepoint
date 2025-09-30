@@ -19,22 +19,22 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        // Search functionality
+        
         if ($search = $request->get('search')) {
             $query->search($search);
         }
 
-        // Category filter
+        
         if ($category = $request->get('category')) {
             $query->where('category', $category);
         }
 
-        // Status filter
+        
         if ($request->has('active_only')) {
             $query->active();
         }
 
-        // Pagination
+       
         $products = $query->latest()->paginate(15);
         $categories = Product::distinct()->pluck('category')->filter();
 
@@ -58,7 +58,7 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Handle image upload
+      
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
             $validated['image'] = $path;
@@ -85,9 +85,9 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Handle image upload
+      
         if ($request->hasFile('image')) {
-            // Delete old image if exists
+          
             if ($product->image) {
                 \Storage::disk('public')->delete($product->image);
             }
@@ -107,7 +107,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Delete image if exists
+       
         if ($product->image) {
             \Storage::disk('public')->delete($product->image);
         }
