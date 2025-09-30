@@ -2,27 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ProductService;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index() {
-        return view('products.index', ['products' => Product::latest()->get()]);
+    protected $service;
+
+    public function __construct(ProductService $service)
+    {
+        $this->service = $service;
     }
 
-    public function store(Request $request) {
-        $data = $request->validate([
-            'name' => 'required',
+    public function index()
+    {
+        $products = $this->service->latest();
+        return view('products.index', compact('products'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string',
             'price' => 'required|numeric',
-            'description' => 'nullable'
+            'description' => 'nullable|string',
         ]);
-        Product::create($data);
+
+        $this->service->create($validated);
         return back()->with('ok', 'Product created');
     }
 
-    public function destroy(Product $product) {
-        $product->delete();
+    public function importFake()
+    {
+        $this->service->importFake();
+        return back()->with('ok', 'Imported fake products');
+    }
+
+    public function destroy(Product $product)
+    {
+        $this->service->delete($product);
         return back()->with('ok', 'Product deleted');
     }
 }

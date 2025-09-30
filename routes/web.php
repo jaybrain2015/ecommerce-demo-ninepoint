@@ -6,7 +6,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('products.index'));
 
+
+
 Route::resource('products', ProductController::class)->middleware('auth');
+
+Route::get('/import/fake', [ProductController::class, 'importFake'])->middleware('auth')->name('products.import.fake');
 
 Route::middleware('auth')->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');

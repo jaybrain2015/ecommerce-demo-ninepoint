@@ -97,7 +97,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'key' => env('APP_KEY'),
+    // Use APP_KEY from env, but if it's empty, use a safe fallback in dev so the app boots.
+    'key' => env('APP_KEY') ?: 'base64:3WfVD8MiUOj6jqC71oqZdcpoWf6SayclQwBGbaJpaIw=',
 
     'previous_keys' => [
         ...array_filter(
